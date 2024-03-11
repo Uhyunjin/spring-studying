@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.sql.DataSource;
 import javax.swing.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +21,31 @@ import static org.junit.Assert.*;
 public class DBConnection2Test {
     @Autowired
     DataSource ds;
+    @Test
+    public void insertUserTest() throws Exception {
+        User user = new User("summery", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
+        int rowCnt = insertUser(user);
+
+        assertTrue(rowCnt==1);
+    }
+    public int insertUser(User user)throws Exception{
+
+        Connection conn = ds.getConnection();
+
+        String sql = "insert into user values (?, ?, ?, ?, ?, ?, now())";
+
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, user.getId());
+        pstmt.setString(2, user.getPwd());
+        pstmt.setString(3, user.getName());
+        pstmt.setString(4, user.getEmail());
+        pstmt.setDate(5, new java.sql.Date(user.getBirth().getTime()));
+        pstmt.setString(6, user.getSns());
+
+        int rowCnt = pstmt.executeUpdate();
+
+        return rowCnt;
+    }
     @Test
     public void main() throws Exception{
 
