@@ -35,12 +35,40 @@ public class DBConnection2Test {
 
     @Test
     public void selectUserTest() throws Exception{
-        User user = new User("asdf", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
         deleteAll();
+        User user = new User("asdf", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
         int rowCnt = insertUser(user);
         User user2 = selectUser("asdf");
         assertTrue(user.getId().equals("asdf"));
 
+    }
+
+    @Test
+    public void deleteUserTest() throws Exception{
+
+        deleteAll();
+
+        int rowCnt = deleteUser("asdf");
+        assertTrue(rowCnt == 0);
+
+
+        User user = new User("asdf", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
+        rowCnt = insertUser(user);
+        assertTrue(rowCnt==1);
+
+        rowCnt = deleteUser(user.getId());
+        assertTrue(rowCnt==1);
+
+        assertTrue(selectUser(user.getId())==null);
+
+    }
+
+    public int deleteUser(String id) throws Exception{
+        Connection conn = ds.getConnection();
+        String sql = "delete from user where id=?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,id);
+        return pstmt.executeUpdate();
     }
 
     private void deleteAll() throws Exception{
