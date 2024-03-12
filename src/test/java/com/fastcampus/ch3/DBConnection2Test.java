@@ -1,6 +1,8 @@
 package com.fastcampus.ch3;
 
+import com.mysql.cj.protocol.Resultset;
 import org.junit.Test;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,6 +14,7 @@ import javax.sql.DataSource;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -24,10 +27,30 @@ public class DBConnection2Test {
     @Test
     public void insertUserTest() throws Exception {
         User user = new User("summery", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
+        deleteAll();
         int rowCnt = insertUser(user);
 
         assertTrue(rowCnt==1);
     }
+
+    @Test
+    public void selectUserTest() throws Exception{
+        User user = new User("asdf", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
+        deleteAll();
+        int rowCnt = insertUser(user);
+        User user2 = selectUser("asdf");
+        assertTrue(user.getId().equals("asdf"));
+
+    }
+
+    private void deleteAll() throws Exception{
+        Connection conn = ds.getConnection();
+
+        String sql = "delete from user";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.executeUpdate();
+    }
+
     public int insertUser(User user)throws Exception{
 
         Connection conn = ds.getConnection();
@@ -45,6 +68,27 @@ public class DBConnection2Test {
         int rowCnt = pstmt.executeUpdate();
 
         return rowCnt;
+    }
+    public User selectUser(String id) throws Exception{
+        Connection conn = ds.getConnection();
+        String sql = "select * from user where id= ? ";
+
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,id);
+        ResultSet rs = pstmt.executeQuery(); //select resultset(테이블)반환
+
+        if(rs.next()){
+            User user = new User();
+            user.setId(rs.getString(1));
+            user.setId(rs.getString(2));
+            user.setId(rs.getString(3));
+            user.setId(rs.getString(4));
+            user.setBirth(new Date(rs.getDate(5).getTime()));
+            user.setId(rs.getString(6));
+            user.setReg_date(rs.getDate(7));
+            return user;
+        }
+        return null;
     }
     @Test
     public void main() throws Exception{
