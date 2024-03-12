@@ -63,6 +63,35 @@ public class DBConnection2Test {
 
     }
 
+    @Test
+    public void updateUserTest() throws Exception{
+        deleteAll();
+
+        int rowCnt = updateUser("asdf", "winter");
+        assertTrue(rowCnt == 0);
+
+
+        User user = new User("asdf", "1234", "summer", "bbb@google.com", new Date(), "fb", new Date());
+        rowCnt = insertUser(user);
+        assertTrue(rowCnt==1);
+
+        rowCnt = updateUser("asdf", "winter");
+        assertTrue(rowCnt==1);
+
+    }
+    public int updateUser(String id, String name) throws Exception {
+
+        Connection conn = ds.getConnection();
+        String sql = "update user set name = ? where id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, name);
+        pstmt.setString(2, id);
+
+        int rowCnt = pstmt.executeUpdate();
+
+        return rowCnt;
+    }
+
     public int deleteUser(String id) throws Exception{
         Connection conn = ds.getConnection();
         String sql = "delete from user where id=?";
