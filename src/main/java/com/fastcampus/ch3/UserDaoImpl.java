@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User selectUser(String id) throws Exception {
+    public User selectUser(String id) {
         User user = null;
 
         Connection conn = null;
@@ -130,8 +130,8 @@ public class UserDaoImpl implements UserDao {
 //        Connection conn = null;
 //        PreparedStatement pstmt = null;
 
-        String sql = "update " +
-                "set pwd = ?, name=?, email=?, birth =?, sns=?, reg_date=? " +
+        String sql = "update user " +
+                "set pwd=?, name=?, email=?, birth =?, sns=?, reg_date=? " +
                 "where id = ? ";
 
         // try-with-resources - since jdk7
