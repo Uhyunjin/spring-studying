@@ -44,17 +44,14 @@ public class RegisterController {
         System.out.println("result="+result);
         System.out.println("user="+user);
 
-        // User객체를 검증한 결과 에러가 있으면, registerForm을 이용해서 에러를 보여줘야 함.
-        if(result.hasErrors()) {
-            return "registerForm";
-        }
-
-        // 2. DB에 신규회원 정보를 저장
+        if(!result.hasErrors()) {
+        // 에러가 없으면 db에 유저 정보를 저장한다
         int rowCnt = userDao.insertUser(user);
-
+        
         // 만약 저장 안되었으면 다시 registerForm을 반환한다
-        if (rowCnt ==FAIL){
-            return "registerForm";
+            if (rowCnt ==FAIL){
+                return "registerForm";
+            }
         }
         
         return "registerInfo";
