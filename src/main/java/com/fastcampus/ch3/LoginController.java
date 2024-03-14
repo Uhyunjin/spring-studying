@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    UserDao userDao;
+    
     @GetMapping("/login")
     public String loginForm() {
         return "loginForm";
