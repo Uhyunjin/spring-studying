@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/register")
 public class RegisterController {
 
+    @Autowired
+    UserDao userDao;
+    int FAIL = 0;
+
     @InitBinder
     public void toDate(WebDataBinder binder) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -46,6 +50,13 @@ public class RegisterController {
         }
 
         // 2. DB에 신규회원 정보를 저장
+        int rowCnt = userDao.insertUser(user);
+
+        // 만약 저장 안되었으면 다시 registerForm을 반환한다
+        if (rowCnt ==FAIL){
+            return "registerForm";
+        }
+        
         return "registerInfo";
     }
 
