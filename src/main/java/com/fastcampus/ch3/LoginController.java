@@ -69,6 +69,17 @@ public class LoginController {
     }
 
     private boolean loginCheck(String id, String pwd) {
-        return "asdf".equals(id) && "1234".equals(pwd);
+//        return "asdf".equals(id) && "1234".equals(pwd);
+        //원래는 아이디랑 비밀번호가 정해져있었음
+        User user = null; // 유저객체하나 생성
+        try{
+            user = userDao.selectUser(id)
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return user!=null && user.getPwd().equals(pwd);
+        // user객체에 해당하는 id의 인스턴스가 잘 입력되어있고
+        // 해당 인스턴스의 패스워드(getPwd)와 입력받은 pwd가 같으면 리턴
     }
 }
