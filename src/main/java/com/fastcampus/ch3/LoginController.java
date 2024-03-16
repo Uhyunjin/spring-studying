@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,13 +68,12 @@ public class LoginController {
 
         return "redirect:"+toURL;
     }
-
     private boolean loginCheck(String id, String pwd) {
 //        return "asdf".equals(id) && "1234".equals(pwd);
         //원래는 아이디랑 비밀번호가 정해져있었음
         User user = null; // 유저객체하나 생성
         try{
-            user = userDao.selectUser(id)
+            user = userDao.selectUser(id);
         } catch(Exception e){
             e.printStackTrace();
             return false;
