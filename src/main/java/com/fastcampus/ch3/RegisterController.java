@@ -50,7 +50,7 @@ public class RegisterController {
         // 에러가 없으면 db에 유저 정보를 저장한다
         int rowCnt = userDao.insertUser(user);
         
-        // 만약 저장 안되었으면 다시 registerForm을 반환한다
+        // 만약 저장 되었으면 다시 registerInfo를 반환한다
             if (rowCnt!=FAIL){
                 return "registerInfo";
             }
