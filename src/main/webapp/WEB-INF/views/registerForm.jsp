@@ -73,7 +73,7 @@
     <title>Register</title>
 </head>
 <body>
-<!-- form action="<c:url value="/register/save"/>" method="POST" onsubmit="return formCheck(this)"-->
+<%--<form action="<c:url value="/register/save"/>" method="POST" onsubmit="return formCheck(this)">--%>
 <form:form modelAttribute="user">
     <div class="title">Register</div>
     <div id="msg" class="msg"><form:errors path="id"/></div>
