@@ -50,9 +50,9 @@ public class RegisterController {
         // 에러가 없으면 db에 유저 정보를 저장한다
         int rowCnt = userDao.insertUser(user);
         
-        // 만약 저장 되었으면 다시 registerInfo를 반환한다
+        // 작동 확인했으니까 홈으로 이동
             if (rowCnt!=FAIL){
-                return "registerInfo";
+                return "index";
             }
         }
         
