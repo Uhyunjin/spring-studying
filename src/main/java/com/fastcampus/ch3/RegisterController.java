@@ -51,12 +51,12 @@ public class RegisterController {
         int rowCnt = userDao.insertUser(user);
         
         // 만약 저장 안되었으면 다시 registerForm을 반환한다
-            if (rowCnt ==FAIL){
-                return "registerForm";
+            if (rowCnt!=FAIL){
+                return "registerInfo";
             }
         }
         
-        return "registerInfo";
+        return "registerForm";
     }
 
     private boolean isValid(User user) {
