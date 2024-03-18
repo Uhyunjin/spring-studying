@@ -1,6 +1,7 @@
 package com.fastcampus.ch3;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -20,21 +21,38 @@ public class A1Dao {
         PreparedStatement pstmt = null;
 
         try {
-            conn = ds.getConnection();
+//            conn = ds.getConnection();
+            //transaction 사용을 위해 datasource connection 변경
+            conn = DataSourceUtils.getConnection(ds);
+
             pstmt = conn.prepareStatement("insert into a1 values(?,?)");
             pstmt.setInt(1, key);
             pstmt.setInt(2, value);
+
+            //커넥션 찍어보기
+            System.out.println(conn);
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(conn, pstmt);
+//            close(conn, pstmt);
+            close(pstmt);
+            DataSourceUtils.releaseConnection(conn, ds);
+            //트랜잭션 매니저가 닫을지 아닌지를 판단
         }
     }
 
     private void close(AutoCloseable... acs) {
         for(AutoCloseable ac : acs)
             try{ if(ac!=null) ac.close(); } catch (Exception e) { e.printStackTrace();}
+    }
+
+    public void deleteAll() throws Exception{
+        Connection conn = ds.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement("delete from a1");
+        pstmt.executeUpdate();
+        close(pstmt);
+
     }
 }
