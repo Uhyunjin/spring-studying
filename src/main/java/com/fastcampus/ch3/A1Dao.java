@@ -31,10 +31,14 @@ public class A1Dao {
 
             //커넥션 찍어보기
             System.out.println(conn);
+            //원래 각각의 insert마다 다른 값이 찍히는데
+            // txmanager가 get connetion을 따로 하는데도 같은 값이 찍히도록 해준다
 
             return pstmt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
+
         } finally {
 //            close(conn, pstmt);
             close(pstmt);
